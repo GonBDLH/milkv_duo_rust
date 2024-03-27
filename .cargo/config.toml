@@ -1,0 +1,9 @@
+[build] 
+target = "riscv64gc-unknown-none-elf"    # Select target (valid targets can be found by "rustup target list")
+
+[target.riscv64gc-unknown-none-elf]
+rustflags = [
+    #"-C", "link-arg=-Tres\\memory.ld",   # Add linker script "{projectdir}/res/memory.ld"
+    #"-C", "opt-level=1",                # Don't optimize
+    "--emit=asm"
+]

@@ -5,5 +5,6 @@ target = "riscv64gc-unknown-none-elf"    # Select target (valid targets can be f
 rustflags = [
     #"-C", "link-arg=-Tres\\memory.ld",   # Add linker script "{projectdir}/res/memory.ld"
     #"-C", "opt-level=1",                # Don't optimize
+    "-C", "link-arg=-Ttext=0x80200000",
     "--emit=asm"
 ]

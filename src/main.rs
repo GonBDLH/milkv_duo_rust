@@ -1,7 +1,11 @@
 #![no_std]
 #![no_main]
 
-use core::{ptr::{read_volatile, write_volatile}, arch::global_asm};
+mod serial;
+
+use core::arch::global_asm;
+
+use serial::uart0_println;
 
 global_asm!(
 	".section .text
@@ -21,24 +25,6 @@ _start:
 	/* Information end */"
 );
 
-const UART0_LSR: usize = 0x04140014;
-const UART0_THR: usize = 0x04140000;
-
-#[no_mangle]
-fn uart0_println(txt: &str) {
-    for i in txt.chars() {
-        uart0_send(i);
-    }
-}
-
-#[no_mangle]
-fn uart0_send(char: char) {
-    unsafe {
-        while read_volatile(UART0_LSR as *const u32) & 0x20 == 0 {}
-
-	write_volatile(UART0_THR as *mut u32, char as u32);
-    }
-}
 
 #[no_mangle]
 pub fn real_start() -> ! {

@@ -7,7 +7,7 @@ use core::arch::{asm, global_asm};
 
 use serial::uart0_println;
 
-use riscv::asm::{ecall, wfi};
+use riscv::asm::{ecall};
 
 global_asm!(
 	".section .text
@@ -34,19 +34,20 @@ pub fn real_start() -> ! {
 
     loop {
 		unsafe {
-			asm!("li a7, 1");
-			asm!("li a0, 'a'");
-			ecall();
+			// asm!("li a7, 1");
+			// asm!("li a0, 'a'");
+			// ecall();
 
 			asm!("li a7, 2");
 			ecall();
 
 			let uart_in: i64;
 
-			asm!("ld {}", out(reg) uart_in);
+			asm!("mv {0}, a0", out(reg) uart_in);
 
 			if uart_in != -1 {
 				asm!("li a7, 1");
+                                asm!("mv a0, {0}", in(reg) uart_in);
 				ecall();
 			}
 		}

@@ -49,7 +49,8 @@ pub fn sbi_console_putchar(ch: i64) {
     unsafe {
         asm!(
             "li a7, 0x01
-            ecall"
+            mv a0, {0}
+            ecall", in(reg) ch
         )
     }
 }

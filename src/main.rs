@@ -29,15 +29,16 @@ _start:
 #[no_mangle]
 pub fn real_start() -> ! {
     // uart0_println("Hola mundo");
+    let msg = "Hola mundo desde SBI\n\r\0".as_bytes();
+    let mut index = 0;
+    let mut char = msg[index];
 
-    for i in "Hola mundo desde SBI".chars() {
-        sbi_console_putchar(i as u64 as i64);
-		nop();
-		nop();
-		nop();
-		nop();
-		
+    while char != 0x00 {
+        sbi_console_putchar(char as i64);
+        index += 1;
+        char = msg[index];
     }
+
 
     // uart0_println("Debug");
 

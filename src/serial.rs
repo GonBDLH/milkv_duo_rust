@@ -1,4 +1,7 @@
-use core::{ptr::{read_volatile, write_volatile}, arch::asm};
+use core::{
+    arch::asm,
+    ptr::{read_volatile, write_volatile},
+};
 
 const UART0_LSR: usize = 0x04140014;
 const UART0_THR: usize = 0x04140000;

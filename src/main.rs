@@ -3,11 +3,9 @@
 
 mod serial;
 
-use core::arch::{asm, global_asm};
+use core::arch::global_asm;
 
 use serial::*;
-
-use riscv::asm::ecall;
 
 global_asm!(
     ".section .text

@@ -34,7 +34,20 @@ pub fn real_start() -> ! {
     let mut char = msg[index];
 
     while char != 0x00 {
-        sbi_console_putchar(char as i64);
+        if let Err(error_code) = sbi_console_putchar(char as i64) {
+			match error_code {
+				-1 => uart0_println("Failed"),
+				-2 => uart0_println("Not supported"),
+				-3 => uart0_println("Invalid parameters"),
+				-4 => uart0_println("Denied or not allowed"),
+				-5 => uart0_println("Invalid address"),
+				-6 => uart0_println("Already available"),
+				-7 => uart0_println("Already started"),
+				-8 => uart0_println("Already stopped"),
+				-9 => uart0_println("Shared memory not available"),
+				_ => unreachable!()
+			}
+		}
         index += 1;
         char = msg[index];
     }

@@ -45,11 +45,11 @@ pub fn sbi_console_getchar() -> Result<i64, ()> {
     }
 }
 
-pub fn sbi_console_putchar(ch: i32) {
+pub fn sbi_console_putchar(ch: i64) {
     unsafe {
         asm!(
             "li a7, 0x01
-            li a0, {0}
+            ld a0, {0}
             ecall", in(reg) ch
         )
     }

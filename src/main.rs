@@ -31,7 +31,7 @@ pub fn real_start() -> ! {
 
     loop {
         let recv = sbi_console_getchar();
-		if let Ok(ch) = recv { sbi_console_putchar(ch as i32) }
+		if let Ok(ch) = recv { sbi_console_putchar(ch) }
     }
 }
 

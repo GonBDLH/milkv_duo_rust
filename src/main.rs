@@ -5,6 +5,7 @@ mod serial;
 
 use core::arch::global_asm;
 
+use riscv::asm::wfi;
 use serial::*;
 
 global_asm!(
@@ -29,16 +30,23 @@ _start:
 pub fn real_start() -> ! {
     uart0_println("Hola mundo");
 
-	for i in "Hola mundo desde SBI".as_bytes() {
-		sbi_console_putchar(*i as u64 as i64)
-	}
-
-	uart0_println("Debug");
-
-    loop {
-        let recv = sbi_console_getchar();
-		if let Ok(ch) = recv { sbi_console_putchar(ch) }
+    for i in "Hola mundo desde SBI".chars() {
+        sbi_console_putchar(i as u64 as i64)
     }
+
+    uart0_println("Debug");
+
+    // loop {
+    //     let recv = sbi_console_getchar();
+    //     if let Ok(ch) = recv {
+    //         sbi_console_putchar(ch)
+    //     }
+    //     wfi();
+    // }
+    
+    wfi();
+
+    loop {}
 }
 
 #[panic_handler]

@@ -31,27 +31,32 @@ pub fn real_start() -> ! {
     // uart0_println("Hola mundo");
     let msg = "Hola mundo desde SBI\n\r\0".as_bytes();
     let mut index = 0;
-    let mut char = msg[index];
+    let mut c = msg[index];
 
-    while char != 0x00 {
-        if let Err(error_code) = sbi_console_putchar(char as i64) {
-			match error_code {
-				-1 => uart0_println("Failed"),
-				-2 => uart0_println("Not supported"),
-				-3 => uart0_println("Invalid parameters"),
-				-4 => uart0_println("Denied or not allowed"),
-				-5 => uart0_println("Invalid address"),
-				-6 => uart0_println("Already available"),
-				-7 => uart0_println("Already started"),
-				-8 => uart0_println("Already stopped"),
-				-9 => uart0_println("Shared memory not available"),
-				_ => unreachable!()
-			}
-		}
-        index += 1;
-        char = msg[index];
-    }
+    // while char != 0x00 {
+    //     if let Err(error_code) = sbi_console_putchar(char as i64) {
+	// 		match error_code {
+	// 			-1 => uart0_println("Failed"),
+	// 			-2 => uart0_println("Not supported"),
+	// 			-3 => uart0_println("Invalid parameters"),
+	// 			-4 => uart0_println("Denied or not allowed"),
+	// 			-5 => uart0_println("Invalid address"),
+	// 			-6 => uart0_println("Already available"),
+	// 			-7 => uart0_println("Already started"),
+	// 			-8 => uart0_println("Already stopped"),
+	// 			-9 => uart0_println("Shared memory not available"),
+	// 			_ => unreachable!()
+	// 		}
+	// 	}
+    //     index += 1;
+    //     char = msg[index];
+    // }
 
+	while c != 0x00 {
+		sbi::legacy::console_putchar(c);
+		index += 1;
+        c = msg[index];
+	}
 
     // uart0_println("Debug");
 

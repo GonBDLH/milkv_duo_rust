@@ -41,10 +41,15 @@ pub fn real_start() -> ! {
 			asm!("li a7, 2");
 			ecall();
 
-			asm!("li a7, 1");
-			ecall();
+			let uart_in: i64;
+
+			asm!("ld {}", out(reg) uart_in);
+
+			if uart_in != -1 {
+				asm!("li a7, 1");
+				ecall();
+			}
 		}
-		wfi();
 	}
 }
 

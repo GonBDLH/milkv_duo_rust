@@ -37,6 +37,12 @@ pub fn real_start() -> ! {
 			asm!("li a7, 1");
 			asm!("li a0, 'a'");
 			ecall();
+
+			asm!("li a7, 2");
+			ecall();
+
+			asm!("li a7, 1");
+			ecall();
 		}
 		wfi();
 	}

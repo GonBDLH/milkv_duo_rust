@@ -1,4 +1,4 @@
-use core::ptr::{write_volatile, read_volatile};
+use core::ptr::{read_volatile, write_volatile};
 
 const UART0_LSR: usize = 0x04140014;
 const UART0_THR: usize = 0x04140000;
@@ -15,7 +15,7 @@ pub fn uart0_send(char: char) {
     unsafe {
         while read_volatile(UART0_LSR as *const u32) & 0x20 == 0 {}
 
-	    write_volatile(UART0_THR as *mut u32, char as u32);
+        write_volatile(UART0_THR as *mut u32, char as u32);
     }
 }
 
@@ -24,5 +24,10 @@ pub fn uart0_recv() -> char {
         while read_volatile(UART0_LSR as *const u32) == 0 {}
 
         read_volatile(UART0_THR as *mut u32) as u8 as char
+    }
+}
+
+pub fn get_char() -> char {
+    unsafe {
     }
 }

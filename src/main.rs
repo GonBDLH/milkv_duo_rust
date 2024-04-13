@@ -7,10 +7,10 @@ use core::arch::{asm, global_asm};
 
 use serial::*;
 
-use riscv::asm::{ecall};
+use riscv::asm::ecall;
 
 global_asm!(
-	".section .text
+    ".section .text
 	.global _start
 _start:
 	/* BL33 information */
@@ -27,15 +27,14 @@ _start:
 	/* Information end */"
 );
 
-
 #[no_mangle]
 pub fn real_start() -> ! {
     uart0_println("Hola mundo");
 
     loop {
-		let recv = uart0_recv();
-		uart0_send(recv);
-	}
+        let recv = uart0_recv();
+        uart0_send(recv);
+    }
 }
 
 #[panic_handler]

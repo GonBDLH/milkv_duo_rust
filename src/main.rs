@@ -30,8 +30,8 @@ pub fn real_start() -> ! {
     uart0_println("Hola mundo");
 
     loop {
-        let recv = uart0_recv();
-        uart0_send(recv);
+        let recv = sbi_console_getchar();
+		if let Ok(ch) = recv { sbi_console_putchar(ch as i32) }
     }
 }
 

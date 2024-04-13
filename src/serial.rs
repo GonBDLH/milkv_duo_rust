@@ -30,38 +30,3 @@ pub fn uart0_recv() -> char {
     }
 }
 
-pub fn sbi_console_getchar() -> Result<i64, ()> {
-    let out: i64;
-
-    unsafe {
-        asm!(
-            "li a7, 0x02
-            ecall
-            mv {0}, a0", out(reg) out
-        );
-    }
-
-    if out == 0 {
-        Ok(out)
-    } else {
-        Err(())
-    }
-}
-
-pub fn sbi_console_putchar(ch: char) -> Result<(), i64> {
-    let mut error_code = 0;
-
-    unsafe {
-        asm!(
-            "ecall",
-            inout("a0") ch as usize => error_code,
-            in("a7") 0x01,
-        )
-    }
-
-    if error_code == 0 {
-        Ok(())
-    } else {
-        Err(error_code)
-    }
-}

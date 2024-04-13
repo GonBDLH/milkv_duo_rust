@@ -5,7 +5,7 @@ mod serial;
 
 use core::arch::global_asm;
 
-use riscv::asm::{nop, wfi};
+use riscv::asm::wfi;
 use serial::*;
 
 global_asm!(
@@ -33,42 +33,20 @@ pub fn real_start() -> ! {
     let mut index = 0;
     let mut c = msg[index];
 
-    while c != 0x00 {
-        if let Err(error_code) = sbi_console_putchar(c as char) {
-            match error_code {
-                -1 => uart0_println("Failed"),
-                -2 => uart0_println("Not supported"),
-                -3 => uart0_println("Invalid parameters"),
-                -4 => uart0_println("Denied or not allowed"),
-                -5 => uart0_println("Invalid address"),
-                -6 => uart0_println("Already available"),
-                -7 => uart0_println("Already started"),
-                -8 => uart0_println("Already stopped"),
-                -9 => uart0_println("Shared memory not available"),
-                _ => unreachable!(),
-            }
-        }
-        index += 1;
-        c = msg[index];
-    }
+	while c != 0 {
+		sbi::legacy::console_putchar(c);
 
-    //	while c != 0x00 {
-    //		sbi::legacy::console_putchar(c);
-    //		index += 1;
-    //        c = msg[index];
-    //	}
+		index += 1;
+		c = msg[index];
+	}
 
-    // uart0_println("Debug");
-
-    // loop {
-    //     let recv = sbi_console_getchar();
-    //     if let Ok(ch) = recv {
-    //         sbi_console_putchar(ch)
-    //     }
-    //     wfi();
-    // }
+    uart0_println("Debug");
 
     loop {
+        let recv = sbi::legacy::console_getchar();
+        if let Some(ch) = recv {
+			sbi::legacy::console_putchar(ch)
+        }
         wfi();
     }
 }

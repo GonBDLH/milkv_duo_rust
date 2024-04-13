@@ -28,13 +28,13 @@ _start:
 
 #[no_mangle]
 pub fn real_start() -> ! {
-    uart0_println("Hola mundo");
+    // uart0_println("Hola mundo");
 
     for i in "Hola mundo desde SBI".chars() {
         sbi_console_putchar(i as u64 as i64)
     }
 
-    uart0_println("Debug");
+    // uart0_println("Debug");
 
     // loop {
     //     let recv = sbi_console_getchar();

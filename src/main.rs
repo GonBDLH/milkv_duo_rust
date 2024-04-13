@@ -30,8 +30,10 @@ pub fn real_start() -> ! {
     uart0_println("Hola mundo");
 
 	for i in "Hola mundo desde SBI".as_bytes() {
-		sbi_console_putchar(*i as i64)
+		sbi_console_putchar(*i as u64 as i64)
 	}
+
+	uart0_println("Debug");
 
     loop {
         let recv = sbi_console_getchar();

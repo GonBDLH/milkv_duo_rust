@@ -3,11 +3,11 @@
 
 mod serial;
 
-use core::arch::global_asm;
+use core::arch::{asm, global_asm};
 
 use serial::uart0_println;
 
-use riscv::asm::wfi;
+use riscv::asm::{ecall, wfi};
 
 global_asm!(
 	".section .text
@@ -33,6 +33,11 @@ pub fn real_start() -> ! {
     uart0_println("Hola mundo");
 
     loop {
+		unsafe {
+			asm!("li a7, 1");
+			asm!("li a0, 'a'");
+			ecall();
+		}
 		wfi();
 	}
 }

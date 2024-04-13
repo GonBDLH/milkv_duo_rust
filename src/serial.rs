@@ -21,7 +21,7 @@ pub fn uart0_send(char: char) {
 
 pub fn uart0_recv() -> char {
     unsafe {
-        while read_volatile(UART0_LSR as *const u32) & 0x20 == 0 {}
+        while read_volatile(UART0_LSR as *const u32) == 0 {}
 
         read_volatile(UART0_THR as *mut u32) as u8 as char
     }

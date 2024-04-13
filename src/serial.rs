@@ -48,15 +48,14 @@ pub fn sbi_console_getchar() -> Result<i64, ()> {
     }
 }
 
-pub fn sbi_console_putchar(ch: i64) -> Result<(), i64> {
-    let mut error_code = 0;    
+pub fn sbi_console_putchar(ch: char) -> Result<(), i64> {
+    let mut error_code = 0;
 
     unsafe {
         asm!(
-            "li a7, 0x01
-            mv a0, {0}
-            ecall
-            mv {1}, a0", in(reg) ch, out(reg) error_code
+            "ecall",
+            inout("a0") ch as usize => error_code,
+            in("a7") 0x01,
         )
     }
 

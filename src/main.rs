@@ -7,6 +7,8 @@ use core::arch::global_asm;
 
 use serial::uart0_println;
 
+use riscv::asm::wfi;
+
 global_asm!(
 	".section .text
 	.global _start
@@ -30,7 +32,9 @@ _start:
 pub fn real_start() -> ! {
     uart0_println("Hola mundo");
 
-    loop {}
+    loop {
+		wfi();
+	}
 }
 
 #[panic_handler]

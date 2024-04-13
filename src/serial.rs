@@ -11,10 +11,18 @@ pub fn uart0_println(txt: &str) {
     uart0_send('\n');
 }
 
-fn uart0_send(char: char) {
+pub fn uart0_send(char: char) {
     unsafe {
         while read_volatile(UART0_LSR as *const u32) & 0x20 == 0 {}
 
-	write_volatile(UART0_THR as *mut u32, char as u32);
+	    write_volatile(UART0_THR as *mut u32, char as u32);
+    }
+}
+
+pub fn uart0_recv() -> char {
+    unsafe {
+        while read_volatile(UART0_LSR as *const u32) & 0x20 == 0 {}
+
+        read_volatile(UART0_THR as *mut u32) as u8 as char
     }
 }

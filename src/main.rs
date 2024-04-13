@@ -5,7 +5,7 @@ mod serial;
 
 use core::arch::{asm, global_asm};
 
-use serial::uart0_println;
+use serial::*;
 
 use riscv::asm::{ecall};
 
@@ -33,24 +33,8 @@ pub fn real_start() -> ! {
     uart0_println("Hola mundo");
 
     loop {
-		unsafe {
-			// asm!("li a7, 1");
-			// asm!("li a0, 'a'");
-			// ecall();
-
-			asm!("li a7, 2");
-			ecall();
-
-			let uart_in: i64;
-
-			asm!("mv {0}, a0", out(reg) uart_in);
-
-			if uart_in != -1 {
-				asm!("li a7, 1");
-                                asm!("mv a0, {0}", in(reg) uart_in);
-				ecall();
-			}
-		}
+		let recv = uart0_recv();
+		uart0_send(recv);
 	}
 }
 
